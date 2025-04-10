@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política Hoy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+        nav {
+            background-color: #34495e;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .container {
+            padding: 20px;
+        }
+        .noticia {
+            border-bottom: 1px solid #ddd;
+            padding: 15px 0;
+        }
+        .noticia h2 {
+            color: #2c3e50;
+        }
+        .formulario {
+            background-color: #f4f4f4;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            margin-top: 10px;
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #1a252f;
+        }
+
+        /* Estilos del chatbot */
+        .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .chatbot-header {
+            background: #2c3e50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .chatbot-messages {
+            height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        .chatbot-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+        .chatbot-input input {
+            flex: 1;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .chatbot-input button {
+            background: #2c3e50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin-left: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .chatbot-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #2c3e50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+    <link rel="icon" href="./logo.ico">
+</head>
+<body>
+
+<header>
+    <h1>Política Hoy</h1>
+    <p>Noticias y análisis sobre el mundo político</p>
+<img src="logo.png" alt="Logotipo de mi sitio" style="width:50%">
+  <h1>Mi Sitio Web</h1> 
+</header>
+
+<nav>
+    <a href="#">Inicio</a>
+    <a href="#">Noticias</a>
+    <a href="#">Análisis</a>
+    <a href="#">Contacto</a>
+</nav>
+
+<div class="container">
+    <section>
+        <article class="noticia">
+            <h2>Elecciones 2025: Lo que debes saber</h2>
+            <p>Las elecciones generales de 2025 se acercan y los candidatos ya han comenzado su campaña...</p>
+        </article>
+
+        <article class="noticia">
+            <h2>Reformas Económicas en Debate</h2>
+            <p>El Congreso discute nuevas reformas económicas que podrían impactar a la población...</p>
+        </article>
+    </section>
+
+    <section class="formulario">
+        <h2>Contacto</h2>
+        <p>Déjanos tu opinión sobre los temas políticos más importantes.</p>
+        <form id="contactoForm">
+            <input type="text" id="nombre" placeholder="Tu Nombre" required>
+            <input type="email" id="email" placeholder="Tu Correo Electrónico" required>
+            <textarea id="mensaje" rows="5" placeholder="Escribe tu mensaje aquí..." required></textarea>
+            <button type="submit">Enviar</button>
+        </form>
+    </section>
+</div>
+
+<!-- Botón para abrir el chatbot -->
+<button class="chatbot-toggle" onclick="toggleChatbot()">💬</button>
+
+<div class="chatbot-container" id="chatbot">
+    <div class="chatbot-header">
+        ChatBot Político 
+        <button style="float: right; background: transparent; color: white; border: none; cursor: pointer;" onclick="toggleChatbot()">✖</button>
+    </div>
+    <div class="chatbot-messages" id="chatMessages"></div>
+    <div class="chatbot-input">
+        <input type="text" id="chatInput" placeholder="Escribe un mensaje...">
+        <button onclick="sendMessage()">Enviar</button>
+    </div>
+</div>
+
+<script>
+    // Función para mostrar u ocultar el chatbot
+    function toggleChatbot() {
+        var chatbot = document.getElementById("chatbot");
+        chatbot.style.display = chatbot.style.display === "flex" ? "none" : "flex";
+    }
+
+    // Función para enviar un mensaje al chatbot
+    function sendMessage() {
+        var inputField = document.getElementById("chatInput");
+        var message = inputField.value.trim();
+        if (message === "") return;
+
+        // Agregar mensaje del usuario
+        var chatBox = document.getElementById("chatMessages");
+        chatBox.innerHTML += `<div><strong>Tú:</strong> ${message}</div>`;
+
+        // Respuesta del chatbot
+        var response = getChatbotResponse(message);
+        setTimeout(() => {
+            chatBox.innerHTML += `<div><strong>ChatBot:</strong> ${response}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight; // Desplazar hacia abajo
+        }, 500);
+
+        inputField.value = ""; // Limpiar el input
+    }
+
+    // Función para generar respuestas básicas
+    function getChatbotResponse(input) {
+        if (input.includes("Hola")) return "Hola necesitas ayuda con algo en especifico.";
+        if (input.includes("electoral")) return "El Proceso Electoral Judicial es el primero que se celebra en México, en el que se elegirán los cargos de Ministras y Ministros de la Suprema Corte de Justicia de la Nación (SCJN), las Magistraturas de las Salas Superior y Regionales del Tribunal Electoral del Poder Judicial de la Federación (TEPJF), las personas Integrantes del Tribunal de Disciplina Judicial y Magistraturas de Circuito y Personas Juzgadoras de Distrito";
+        if (input.includes("elecciones")) return "Las elecciones en México en 2025 están programadas para el domingo 1 de Junio. En esa fecha, se llevarán a cabo diversos procesos electorales: 1.Elecciones del Poder Judicial de la Federación: Por primera vez, la cľudadanía elegirá medľante voto popular a Jueces, magistrados y ministros de la Suprema Corte de Justicia de la Nación (SCJN). 2.Elecciones locales en Durango y Veracruz: Ambos estados celebrarán comicios para renovar un total de 1,458 cargos municipales. En Durango, se elegfrán 39 presídencias munīcipales, 39 sindicaturas y 326 regidurías. En Veracruz, se votará por 212 presidencľas municipales, 212 sindicaturas y 630 regidurías.";
+        if (input.includes("candidatos")) return "JOHNNY MORALES MARTINEZ 2° TRIBUNAL LABORAL FEDERAL DE ASUNTOS INDIVIDUALES EN EL ESTADO DE TLAXCALA, COON SEDE EN TLAXCALA -RICARDO JOSÉ MORAN GONZALEZ JUZGAD DE DISTRITO ESPECIALIZAD EN EL SISTEMA PENAL ACUSATORIO DEL CENTRO DE JUSTICIA PENAL FEDERAL EN EL ESTADO DE TLAXCALA, CON RESIDENCIA EN APIZACO -ANASTACI ROMO VARGAS JUZGADO 2° DE DISTRITO EN EL ESTADO DE TLAXCALA, CON RESIDENCIA EN APIZACO";
+        if (input.includes("reformas")) return "Las reformas económicas están en debate en el Congreso.";
+        if (input.includes("presidente")) return "El actual presidente está en su segundo mandato.";
+        if (input.includes("importancia")) return "Las elecciones de magistrados son cruciales para asegurar la justicia y el estado de derecho en Tlaxcala."
+        return "No tengo información sobre eso, pero puedo ayudarte con noticias políticas.";
+    }
+
+    // Evento para enviar mensaje con la tecla Enter
+    document.getElementById("chatInput").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+    });
+</script>
+
+</body>
+</html>
